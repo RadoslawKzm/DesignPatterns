@@ -5,13 +5,12 @@ import string
 from typing import List
 
 
-def generate_id(length=8):
+def generate_id(*, length=8):
     # helper function for generating an id
-    return ''.join(random.choices(string.ascii_uppercase, k=length))
+    return "".join(random.choices(string.ascii_uppercase, k=length))
 
 
 class SupportTicket:
-
     def __init__(self, *, customer, issue):
         self.id: str = generate_id()
         self.customer: str = customer
@@ -22,26 +21,26 @@ class TicketStrategy(ABC):
     """Abstract interface for future strategies of ticket ordering"""
 
     @abstractmethod
-    def get_ticket(self, tickets: List[SupportTicket]) -> List[SupportTicket]:
+    def get_ticket(self, *, tickets: List[SupportTicket]) -> List[SupportTicket]:
         pass
 
 
 class ReverseTicketStrategy(TicketStrategy):
-    def get_ticket(self, tickets: List[SupportTicket]) -> List[SupportTicket]:
+    def get_ticket(self, *, tickets: List[SupportTicket]) -> List[SupportTicket]:
         list_ = tickets.copy()
         list_.reverse()
         return list_
 
 
 class RandomTicketStrategy(TicketStrategy):
-    def get_ticket(self, tickets: List[SupportTicket]) -> List[SupportTicket]:
+    def get_ticket(self, *, tickets: List[SupportTicket]) -> List[SupportTicket]:
         list_ = tickets.copy()
         random.shuffle(list_)
         return list_
 
 
 class FIFOTicketStrategy(TicketStrategy):
-    def get_ticket(self, tickets: List[SupportTicket]) -> List[SupportTicket]:
+    def get_ticket(self, *, tickets: List[SupportTicket]) -> List[SupportTicket]:
         return tickets.copy()
 
 
@@ -59,7 +58,8 @@ class CustomerSupport:
         for ticket in processed_tickets:
             self.process_ticket(ticket=ticket)
 
-    def process_ticket(self, *, ticket: SupportTicket):
+    @staticmethod
+    def process_ticket(*, ticket: SupportTicket):
         print("==================================")
         print(f"Processing ticket id: {ticket.id}")
         print(f"Customer: {ticket.customer}")
@@ -68,8 +68,8 @@ class CustomerSupport:
 
 
 app = CustomerSupport()
-app.create_ticket(customer="PGS SOFTWARE", issue="Cannot name all solid principles and all Design patterns")
+app.create_ticket(customer="PGS SOFTWARE", issue="Cannot name all solid principles and all Design patterns from head")
 app.create_ticket(customer="PGS SOFTWARE", issue="Cannot name all SQL join types")
-app.create_ticket(customer="PGS SOFTWARE", issue="Cannot differentiate Put from POST request, sad")
+app.create_ticket(customer="PGS SOFTWARE", issue="Want to use google in interview, what a mad lad")
 
 app.process_tickets(processing_strategy=ReverseTicketStrategy())
