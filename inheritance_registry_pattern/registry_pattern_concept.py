@@ -5,9 +5,9 @@ from abc import ABC
 
 class Car(ABC):
     """Below, pattern is shown. We can introduce any business logic with abstractmethod and run it recursively
-     on subclasses as get_subs method is doing while aggregating all subclasses of given parent class.
-     It has similarities to composite pattern but composite pattern is about creating given composite at runtime.
-     Here we create create tree of inheritance without specifying it at runtime"""
+    on subclasses as get_subs method is doing while aggregating all subclasses of given parent class.
+    It has similarities to composite pattern but composite pattern is about creating given composite at runtime.
+    Here we create create tree of inheritance without specifying it at runtime"""
 
     registry: dict = dict()
 

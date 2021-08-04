@@ -1,5 +1,6 @@
 """Method Resolution Order example (MRO)"""
 
+
 class A:
     pass
 
