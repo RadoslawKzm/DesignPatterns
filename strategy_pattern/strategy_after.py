@@ -68,8 +68,8 @@ class CustomerSupport:
 
 
 app = CustomerSupport()
-app.create_ticket(customer="PGS SOFTWARE", issue="Cannot name all solid principles and all Design patterns from head")
-app.create_ticket(customer="PGS SOFTWARE", issue="Cannot name all SQL join types")
-app.create_ticket(customer="PGS SOFTWARE", issue="Want to use google in interview, what a mad lad")
+app.create_ticket(customer="Test1", issue="Random message 1")
+app.create_ticket(customer="Test2", issue="Random message 2")
+app.create_ticket(customer="Test3", issue="Random message 3")
 
 app.process_tickets(processing_strategy=ReverseTicketStrategy())
