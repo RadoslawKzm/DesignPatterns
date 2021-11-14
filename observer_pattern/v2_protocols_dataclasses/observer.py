@@ -1,5 +1,5 @@
-import uuid
 from dataclasses import dataclass, field
+from functools import wraps
 from typing import Protocol
 
 
@@ -9,29 +9,13 @@ class SubscriberProtocol(Protocol):
     def notify(self, msg: str, *args, **kwargs) -> None:
         ...
 
-    def __hash__(self):
-        ...
 
-
-@dataclass(unsafe_hash=True)
+@dataclass(frozen=True)
 class Subscriber:
     name: str
 
     def notify(self, msg: str, *args, **kwargs):
-        print(f"{self.name} received {msg = }, {args= }, {kwargs= }")
-
-
-# class SubjectProtocol(Protocol):
-#     subscribers: set[SubscriberProtocol]
-#
-#     def subscribe(self, subscriber: SubscriberProtocol) -> None:
-#         ...
-#
-#     def unsubscribe(self, subscriber: SubscriberProtocol) -> None:
-#         ...
-#
-#     def notify(self) -> None:
-#         ...
+        print(f"{self.name}:{msg}, {args= }, {kwargs= }")
 
 
 @dataclass
@@ -49,3 +33,19 @@ class Subject:
         msg = f"TOPIC:{self.name}: {msg}"
         for subscriber in self.subscribers:
             subscriber.notify(msg, *args, **kwargs)
+
+
+def observer_decorator(*subscribers: SubscriberProtocol):
+    def decorator(func):
+        func_subject = Subject(subscribers={subscriber for subscriber in subscribers}, name=f"{func.__name__}")
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            func_subject.notify(msg=f"Starting")
+            ret_val = func(*args, **kwargs)
+            func_subject.notify(msg=f"Closing")
+            return ret_val
+
+        return wrapper
+
+    return decorator
